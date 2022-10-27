@@ -12,18 +12,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-provider "google" {
-  project = var.project_id
-  region  = var.region
+variable "project_id" {
+	default = ""
 }
 
-module "scheduled-cluster-sizing" {
-	source = "./modules/scheduled-cluster-sizing"
-    project_id              = var.project_id
-    app_id                  = var.app_id
-    region                  = var.region
-    cluster_name            = var.cluster_name
-    instance_count          = var.instance_count
-    service_account_email   = var.service_account_email
-    schedule                = var.schedule
+variable "app_id" {
+	default = ""
+}
+
+variable "region" {
+	default = ""
+}
+
+variable "cluster_name" {
+	default = ""
+}
+
+variable "instance_count" {
+	default = ""
+}
+
+variable "service_account_email" {
+	default = ""
+}
+
+variable "schedule" {
+    default = ""
 }

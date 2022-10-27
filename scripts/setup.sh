@@ -85,4 +85,4 @@ echo " Applying terraform ..."
 
 terraform init
 terraform plan
-terraform apply --vars-file="$TF_VARS_FILE"
+terraform apply --var-file="$TF_VARS_FILE"
