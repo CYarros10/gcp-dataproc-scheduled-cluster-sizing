@@ -18,7 +18,7 @@ provider "google" {
 }
 
 resource "google_storage_bucket" "cloud-function-source-bucket" {
-    name     = "${var.project_id}-${var.app_id}-source"
+    name     = "${var.app_id}-source"
     location = var.region
 }
 
