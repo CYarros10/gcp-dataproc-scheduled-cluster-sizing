@@ -20,7 +20,7 @@ usage() {
 }
 export -f usage
 
-while getopts ":p:n:r:c:i:" opt; do
+while getopts ":p:n:r:c:i:s:" opt; do
     case $opt in
         p ) projectId="$OPTARG";;
         n ) projectNumber="$OPTARG";;
@@ -42,6 +42,7 @@ echo " Project Number: ${projectNumber}"
 echo " Region: ${region}" 
 echo " Cluster Name: ${clusterName}" 
 echo " Instance Count: ${instanceCount}"
+echo " Schedule: ${schedule}"
 
 echo "===================================================="
 echo " Setting up project ..."
@@ -67,20 +68,21 @@ echo " Updating terraform variables ..."
 
 cd terraform || exit
 
-# edit the variables.tf
+# edit the variables
+export TF_VARS_FILE=scs-"$clusterName"-"$instanceCount".tfvars
+cp input.template.tfvars "$TF_VARS_FILE"
+sed -i "s|%%PROJECT_ID%%|$projectId|g" "$TF_VARS_FILE"
+sed -i "s|%%PROJECT_NUMBER%%|$projectNumber|g" "$TF_VARS_FILE"
+sed -i "s|%%REGION%%|$region|g" "$TF_VARS_FILE"
+sed -i "s|%%CLUSTER_NAME%%|$clusterName|g" "$TF_VARS_FILE"
+sed -i "s|%%INSTANCE_COUNT%%|$instanceCount|g" "$TF_VARS_FILE"
+sed -i "s|%%SCHEDULE%%|$schedule|g" "$TF_VARS_FILE"
 
-sed -i "s|%%PROJECT_ID%%|$projectId|g" variables.tf
-sed -i "s|%%PROJECT_NUMBER%%|$projectNumber|g" variables.tf
-sed -i "s|%%REGION%%|$region|g" variables.tf
-sed -i "s|%%CLUSTER_NAME%%|$clusterName|g" variables.tf
-sed -i "s|%%INSTANCE_COUNT%%|$instanceCount|g" variables.tf
-sed -i "s|%%SCHEDULE%%|$schedule|g" variables.tf
-
-cat variables.tf
+cat "$TF_VARS_FILE"
 
 echo "===================================================="
 echo " Applying terraform ..."
 
 terraform init
 terraform plan
-terraform apply
+terraform apply --vars-file="$TF_VARS_FILE"

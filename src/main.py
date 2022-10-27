@@ -27,7 +27,7 @@ from oauth2client.client import GoogleCredentials
 _PROJECT_ID = os.environ.get('PROJECT_ID', 'Environment variable is not set.')
 _REGION = os.environ.get('REGION', 'Environment variable is not set.')
 _CLUSTER_NAME = os.environ.get('CLUSTER_NAME', 'Environment variable is not set.')
-_INSTANCE_COUNT = str(os.environ.get('MIN_INSTANCE_COUNT', 'Environment variable is not set.'))
+_INSTANCE_COUNT = str(os.environ.get('INSTANCE_COUNT', 'Environment variable is not set.'))
 
 
 def sample_update_cluster():
@@ -51,10 +51,10 @@ def sample_update_cluster():
         project_id=_PROJECT_ID, region=_REGION, cluster_name=_CLUSTER_NAME
     )
 
-    mask = {"paths": {"config.worker_config.num_instances": _MIN_INSTANCE_COUNT}}
+    mask = {"paths": {"config.worker_config.num_instances": _INSTANCE_COUNT}}
 
     # Update cluster config
-    cluster.config.worker_config.num_instances = int(_MIN_INSTANCE_COUNT)
+    cluster.config.worker_config.num_instances = int(_INSTANCE_COUNT)
 
     # Update cluster
     operation = client.update_cluster(

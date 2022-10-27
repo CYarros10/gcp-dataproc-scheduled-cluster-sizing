@@ -12,30 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "project_id" {
-	default = ""
-}
-
-variable "app_id" {
-	default = ""
-}
-
-variable "region" {
-	default = ""
-}
-
-variable "cluster_name" {
-	default = ""
-}
-
-variable "instance_count" {
-	default = ""
-}
-
-variable "service_account_email" {
-	default = ""
-}
-
-variable "schedule" {
-    default = ""
-}
+project_id              = "%%PROJECT_ID%%"
+app_id                  = "scs-%%CLUSTER_NAME%%-%%INSTANCE_COUNT%%"
+region                  = "%%REGION%%"
+cluster_name            = "%%CLUSTER_NAME%%"
+instance_count          = "%%INSTANCE_COUNT%%"
+service_account_email   = "%%PROJECT_NUMBER%%-compute@developer.gserviceaccount.com"
+scheduler               = "%%SCHEDULE%%"

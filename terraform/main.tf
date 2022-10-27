@@ -23,7 +23,7 @@ resource "google_storage_bucket" "cloud-function-source-bucket" {
 }
 
 resource "google_storage_bucket" "cloud-function-app-bucket" {
-    name     = "${var.project_id}-${var.app_id}"
+    name     = "${var.app_id}-app"
     location = var.region
 }
 
