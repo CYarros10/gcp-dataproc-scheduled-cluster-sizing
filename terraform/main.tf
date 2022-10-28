@@ -22,8 +22,10 @@ module "scheduled-cluster-sizing" {
     project_id              = var.project_id
     app_id                  = var.app_id
     region                  = var.region
-    cluster_name            = var.cluster_name
-    instance_count          = var.instance_count
     service_account_email   = var.service_account_email
     schedule                = var.schedule
+    primary_size            = var.primary_size
+    secondary_size          = var.secondary_size
+    label_key               = var.label_key
+    label_val               = var.label_val
 }

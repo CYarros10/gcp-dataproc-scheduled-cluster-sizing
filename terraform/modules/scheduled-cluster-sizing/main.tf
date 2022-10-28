@@ -18,12 +18,12 @@ provider "google" {
 }
 
 resource "google_storage_bucket" "cloud-function-source-bucket" {
-    name     = "${var.app_id}-source"
+    name     = "${var.app_id}-src"
     location = var.region
 }
 
 resource "google_storage_bucket" "cloud-function-app-bucket" {
-    name     = "${var.app_id}-app"
+    name     = "${var.app_id}-out"
     location = var.region
 }
 
@@ -72,12 +72,14 @@ service_config {
     min_instance_count = 0
     available_memory    = "256Mi"
     timeout_seconds     = 60
-				environment_variables = {
-		      PROJECT_ID = var.project_id
-					REGION = var.region
-					CLUSTER_NAME = var.cluster_name
-          INSTANCE_COUNT = var.instance_count
-		}
+	environment_variables = {
+        PROJECT_ID = var.project_id
+        REGION = var.region
+        PRIMARY_SIZE = var.primary_size
+        SECONDARY_SIZE = var.secondary_size
+        LABEL_KEY = var.label_key
+        LABEL_VAL = var.label_val
+	}
   }
 
 event_trigger {

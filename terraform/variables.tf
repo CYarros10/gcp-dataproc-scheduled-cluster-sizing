@@ -24,18 +24,26 @@ variable "region" {
 	default = ""
 }
 
-variable "cluster_name" {
-	default = ""
-}
-
-variable "instance_count" {
-	default = ""
-}
-
 variable "service_account_email" {
 	default = ""
 }
 
 variable "schedule" {
     default = ""
+}
+
+variable "primary_size" {
+	default = ""
+}
+
+variable "secondary_size" {
+	default = ""
+}
+
+variable "label_key" {
+	default = ""
+}
+
+variable "label_val" {
+	default = ""
 }

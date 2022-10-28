@@ -13,9 +13,11 @@
 # limitations under the License.
 
 project_id              = "%%PROJECT_ID%%"
-app_id                  = "scs-%%CLUSTER_NAME%%-%%INSTANCE_COUNT%%"
+app_id                  = "dscs-%%LABEL_KEY%%-%%LABEL_VAL%%-%%PRIMARY_SIZE%%-%%SECONDARY_SIZE%%"
 region                  = "%%REGION%%"
-cluster_name            = "%%CLUSTER_NAME%%"
-instance_count          = "%%INSTANCE_COUNT%%"
 service_account_email   = "%%PROJECT_NUMBER%%-compute@developer.gserviceaccount.com"
 schedule                = "%%SCHEDULE%%"
+primary_size            = "%%PRIMARY_SIZE%%"
+secondary_size          = "%%SECONDARY_SIZE%%"
+label_key               = "%%LABEL_KEY%%"
+label_val               = "%%LABEL_VAL%%"

@@ -24,13 +24,20 @@ import functions_framework
 from google.cloud import dataproc_v1
 from oauth2client.client import GoogleCredentials
 
-_PROJECT_ID = os.environ.get('PROJECT_ID', 'Environment variable is not set.')
-_REGION = os.environ.get('REGION', 'Environment variable is not set.')
-_CLUSTER_NAME = os.environ.get('CLUSTER_NAME', 'Environment variable is not set.')
-_INSTANCE_COUNT = str(os.environ.get('INSTANCE_COUNT', 'Environment variable is not set.'))
+_PROJECT_ID = os.environ.get("PROJECT_ID", "Environment var not set.")
+_REGION = os.environ.get("REGION", "Environment var not set.")
+_LABEL_KEY = os.environ.get("LABEL_KEY", "Environment var not set.")
+_LABEL_VAL = os.environ.get("LABEL_VAL", "Environment var not set.")
+_PRI_SIZE = str(os.environ.get("PRIMARY_SIZE", "Environment var not set."))
+_SEC_SIZE = str(os.environ.get("SECONDARY_SIZE", "Environment var not set."))
 
 
-def sample_update_cluster():
+# Create a client with the endpoint set to the desired cluster region.
+_DATAPROC_CLIENT = dataproc_v1.ClusterControllerClient(
+    client_options={"api_endpoint": f"{_REGION}-dataproc.googleapis.com:443"}
+)
+
+def resize_cluster(cluster_name):
     """This sample walks a user through updating a Cloud Dataproc cluster
     using the Python client library.
     Args:
@@ -39,29 +46,30 @@ def sample_update_cluster():
         cluster_name (str): Name to use for creating a cluster.
     """
 
-    print(f"Beginning cluster update: {_CLUSTER_NAME}")
-
-    # Create a client with the endpoint set to the desired cluster region.
-    client = dataproc_v1.ClusterControllerClient(
-        client_options={"api_endpoint": f"{_REGION}-dataproc.googleapis.com:443"}
-    )
+    print(f"Beginning cluster update: {cluster_name}")
 
     # Get cluster you wish to update.
-    cluster = client.get_cluster(
-        project_id=_PROJECT_ID, region=_REGION, cluster_name=_CLUSTER_NAME
+    cluster = _DATAPROC_CLIENT.get_cluster(
+        project_id=_PROJECT_ID, region=_REGION, cluster_name=cluster_name
     )
 
-    mask = {"paths": {"config.worker_config.num_instances": _INSTANCE_COUNT}}
+    mask = {
+        "paths": {
+            "config.worker_config.num_instances": _PRI_SIZE,
+            "config.secondary_worker_config.num_instances": _SEC_SIZE,
+        }
+    }
 
     # Update cluster config
-    cluster.config.worker_config.num_instances = int(_INSTANCE_COUNT)
+    cluster.config.worker_config.num_instances = int(_PRI_SIZE)
+    cluster.config.secondary_worker_config.num_instances = int(_SEC_SIZE)
 
     # Update cluster
-    operation = client.update_cluster(
+    operation = _DATAPROC_CLIENT.update_cluster(
         project_id=_PROJECT_ID,
         region=_REGION,
         cluster=cluster,
-        cluster_name=_CLUSTER_NAME,
+        cluster_name=cluster_name,
         update_mask=mask,
     )
 
@@ -69,10 +77,32 @@ def sample_update_cluster():
     updated_cluster = operation.result()
     print(f"Cluster was updated successfully: {updated_cluster.cluster_name}")
 
+def get_cluster_names():
+    """
+    Return a list of cluster names that all have a given cluster label.
+    """
+
+    cluster_names = []
+    filter_ex = f"labels.{_LABEL_KEY} = {_LABEL_VAL}"
+    print(f"Searching for clusters based on the following filter expression: {filter_ex}")
+
+    for cluster in _DATAPROC_CLIENT.list_clusters(
+        request={
+            "project_id": _PROJECT_ID, 
+            "region": _REGION,
+            "filter": filter_ex
+        }
+    ):
+        cluster_names.append[cluster.cluster_name]
+
+    return cluster_names
+
 
 @functions_framework.cloud_event
 def execute(trigger):
     """
     Cloud Function entry point.
     """
-    sample_update_cluster()
+    clusters = get_cluster_names()
+    for c in clusters:
+        resize_cluster(c)
