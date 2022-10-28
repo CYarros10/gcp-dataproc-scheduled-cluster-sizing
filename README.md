@@ -40,7 +40,7 @@ Saving you 19 hours of associated storage costs.
 To deploy the solution, simply run the following command.
 
 ```
-./scripts/setup.sh -p <your project id> -n <your project number> -r <your region> -c <target dataproc cluster name> -i <new node count> -s <regex schedule>
+./scripts/setup.sh -p <project id> -n <project num> -r <region> -s <regex schedule -a <primary worker count> -b <secondary worker count> -k <label key> -v <label value>
 ```
 
 this will deploy:
