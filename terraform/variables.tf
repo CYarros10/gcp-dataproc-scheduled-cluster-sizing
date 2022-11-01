@@ -13,37 +13,55 @@
 # limitations under the License.
 
 variable "project_id" {
-	default = ""
+	default 	= ""
+    type    	= string
+    description = "Google Cloud Project ID"
 }
 
 variable "app_id" {
-	default = ""
+	default 	= ""
+    type    	= string
+    description = "Application name/identifier"
 }
 
 variable "region" {
-	default = ""
+	default 	= ""
+    type    	= string
+    description = "Google Cloud Region"
 }
 
 variable "service_account_email" {
-	default = ""
+	default 	= ""
+    type    	= string
+    description = "Google Cloud IAM service account email"
 }
 
 variable "schedule" {
-    default = ""
+	default 	= ""
+    type    	= string
+    description = "Regex schedule"
 }
 
 variable "primary_size" {
-	default = ""
+	default 	= ""
+    type    	= string
+    description = "Number of primary workers"
 }
 
 variable "secondary_size" {
-	default = ""
+	default 	= ""
+    type    	= string
+    description = "Number of secondary workers"
 }
 
 variable "label_key" {
-	default = ""
+	default 	= ""
+    type    	= string
+    description = "Dataproc cluster label key"
 }
 
 variable "label_val" {
-	default = ""
+	default 	= ""
+    type    	= string
+    description = "Dataproc cluster label value"
 }
