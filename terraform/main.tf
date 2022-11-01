@@ -12,6 +12,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+locals {
+  apis = [
+    "storage-component.googleapis.com",
+    "compute.googleapis.com",
+    "servicenetworking.googleapis.com",
+    "iam.googleapis.com",
+    "dataproc.googleapis.com",
+    "cloudbilling.googleapis.com",
+    "artifactregistry.googleapis.com",
+    "cloudbuild.googleapis.com",
+    "cloudfunctions.googleapis.com",
+    "logging.googleapis.com",
+    "pubsub.googleapis.com",
+    "run.googleapis.com",
+    "eventarc.googleapis.com"
+  ]
+}
+
+data "google_project" "project" {
+  project_id = var.project_id
+}
+
+resource "google_project_service" "project" {
+  for_each = toset(local.apis)
+  project  = data.google_project.project.project_id
+  service  = each.key
+
+  disable_on_destroy = false
+}
+
 provider "google" {
   project = var.project_id
   region  = var.region
